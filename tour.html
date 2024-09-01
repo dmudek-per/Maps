@@ -1,72 +1,101 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <script>
-        L_NO_TOUCH = false;
-        L_DISABLE_3D = false;
-    </script>
-    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
-    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
-    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js"></script>
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copenhagen Itinerary Map</title>
     <style>
-        #map {
-            position: relative;
-            width: 100.0%;
-            height: 100.0%;
-            left: 0.0%;
-            top: 0.0%;
-        }
+        #map { height: 100%; }
+        html, body { height: 100%; margin: 0; padding: 0; }
     </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 </head>
 <body>
-    <div class="folium-map" id="map"></div>
-</body>
-<script>
-    var map = L.map("map", {
-        center: [55.676098, 12.568337],
-        crs: L.CRS.EPSG3857,
-        zoom: 13,
-        zoomControl: true,
-        preferCanvas: false,
-    });
+    <div id="map"></div>
+    <script>
+        // Initialize the map
+        var map = L.map('map').setView([55.676098, 12.568337], 13);
 
-    var tile_layer = L.tileLayer(
-        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        {
-            attribution: "Data by &copy; <a href=\"http://openstreetmap.org\">OpenStreetMap</a>, under <a href=\"http://www.openstreetmap.org/copyright\">ODbL</a>.",
-            detectRetina: false,
-            maxNativeZoom: 18,
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 18,
-            minZoom: 0,
-            noWrap: false,
-            opacity: 1,
-            subdomains: "abc",
-            tms: false
-        }
-    ).addTo(map);
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
 
-    // Add markers for each location
-    L.marker([55.664397, 12.563789]).addTo(map).bindPopup("Cabinn Copenhagen");
-    L.marker([55.676111, 12.579022]).addTo(map).bindPopup("Christiansborg Palace");
-    L.marker([55.672617, 12.571705]).addTo(map).bindPopup("Ny Carlsberg Glyptotek");
-    L.marker([55.673676, 12.568147]).addTo(map).bindPopup("Tivoli Gardens");
-    L.marker([55.685380, 12.577446]).addTo(map).bindPopup("Rosenborg Castle");
-    L.marker([55.683847, 12.576261]).addTo(map).bindPopup("Round Tower");
-    L.marker([55.688318, 12.580524]).addTo(map).bindPopup("Museum of Danish Resistance");
-    L.marker([55.661307, 12.535869]).addTo(map).bindPopup("Carlsberg Brewery");
-    L.marker([55.685256, 12.593942]).addTo(map).bindPopup("Amalienborg Museum");
-    L.marker([55.676002, 12.579263]).addTo(map).bindPopup("Thorvaldsens Museum");
-    L.marker([55.592914, 12.673549]).addTo(map).bindPopup("Dragør Town");
-</script>
+        // Define key locations with their information
+        var locations = {
+            "Cabinn Copenhagen": {
+                "coords": [55.664397, 12.563789],
+                "description": "Your hotel - Cabinn Copenhagen"
+            },
+            "Christiansborg Palace": {
+                "coords": [55.676111, 12.579022],
+                "description": "Christiansborg Palace<br>Visit: Sun 4:00 PM - 5:00 PM<br>Cost: 160 DKK<br>Open: Sun 10:00 AM - 5:00 PM, Mon 10:00 AM - 5:00 PM, Tues 10:00 AM - 5:00 PM"
+            },
+            "Ny Carlsberg Glyptotek": {
+                "coords": [55.672617, 12.571705],
+                "description": "Ny Carlsberg Glyptotek<br>Visit: Sun 6:45 PM - 7:30 PM<br>Cost: 115 DKK (Free on Sundays)<br>Open: Sun 11:00 AM - 9:00 PM, Mon Closed, Tues 10:00 AM - 9:00 PM"
+            },
+            "Tivoli Gardens": {
+                "coords": [55.673676, 12.568147],
+                "description": "Tivoli Gardens<br>Visit: Sun 7:45 PM - 10:00 PM<br>Cost: 145 DKK<br>Open: Sun 11:00 AM - 11:00 PM, Mon 11:00 AM - 11:00 PM, Tues 11:00 AM - 11:00 PM"
+            },
+            "Rosenborg Castle": {
+                "coords": [55.685380, 12.577446],
+                "description": "Rosenborg Castle<br>Visit: Mon 10:00 AM - 11:30 AM<br>Cost: 130 DKK<br>Open: Sun 10:00 AM - 4:00 PM, Mon 10:00 AM - 4:00 PM, Tues 10:00 AM - 4:00 PM"
+            },
+            "Round Tower": {
+                "coords": [55.683847, 12.576261],
+                "description": "Round Tower<br>Visit: Mon 11:45 AM - 12:30 PM<br>Cost: 40 DKK<br>Open: Sun 10:00 AM - 8:00 PM, Mon 10:00 AM - 8:00 PM, Tues 10:00 AM - 8:00 PM"
+            },
+            "Museum of Danish Resistance": {
+                "coords": [55.688318, 12.580524],
+                "description": "Museum of Danish Resistance<br>Visit: Mon 2:00 PM - 3:00 PM<br>Cost: 95 DKK<br>Open: Sun 10:00 AM - 5:00 PM, Mon 10:00 AM - 5:00 PM, Tues 10:00 AM - 5:00 PM"
+            },
+            "Carlsberg Brewery": {
+                "coords": [55.661307, 12.535869],
+                "description": "Carlsberg Brewery<br>Visit: Mon 5:00 PM - 6:30 PM<br>Cost: 100 DKK<br>Open: Sun 10:00 AM - 6:00 PM, Mon Closed, Tues 10:00 AM - 6:00 PM"
+            },
+            "Amalienborg Museum": {
+                "coords": [55.685256, 12.593942],
+                "description": "Amalienborg Museum<br>Visit: Tues 10:00 AM - 11:00 AM<br>Cost: 120 DKK<br>Open: Sun 10:00 AM - 4:00 PM, Mon Closed, Tues 10:00 AM - 4:00 PM"
+            },
+            "Thorvaldsens Museum": {
+                "coords": [55.676002, 12.579263],
+                "description": "Thorvaldsens Museum<br>Visit: Tues 1:00 PM - 2:00 PM<br>Cost: 100 DKK<br>Open: Sun 10:00 AM - 5:00 PM, Mon Closed, Tues 10:00 AM - 5:00 PM"
+            },
+            "Dragør Town": {
+                "coords": [55.592914, 12.673549],
+                "description": "Dragør Town<br>Visit: Tues 5:30 PM - 7:30 PM<br>Cost: Free<br>Open: Open 24 hours"
+            }
+        };
+
+        // Add markers for each location
+        for (var location in locations) {
+            var info = locations[location];
+            L.marker(info.coords).addTo(map)
+                .bindPopup(info.description)
+                .bindTooltip(location);
+        }
+
+        // Function to add current location marker
+        function onLocationFound(e) {
+            var radius = e.accuracy / 2;
+            var locationMarker = L.marker(e.latlng).addTo(map)
+                .bindPopup("You are here within " + radius + " meters").openPopup();
+            var locationCircle = L.circle(e.latlng, radius).addTo(map);
+        }
+
+        // Handle location error
+        function onLocationError(e) {
+            alert(e.message);
+        }
+
+        // Request current location
+        map.on('locationfound', onLocationFound);
+        map.on('locationerror', onLocationError);
+        map.locate({setView: true, maxZoom: 16});
+    </script>
+</body>
 </html>
